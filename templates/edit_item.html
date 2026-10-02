@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Edit Item{% endblock %}
+{% block content %}
+<h1>Edit item #{{ item.item_id }}</h1>
+<form method="post" class="form">
+  <label>Item name <input name="item_name" value="{{ item.item_name }}" required></label>
+  <label>Item type <input name="item_type" value="{{ item.item_type }}" required></label>
+  <label>Colour <input name="colour" value="{{ item.colour or '' }}"></label>
+  <label>Brand <input name="brand" value="{{ item.brand or '' }}"></label>
+  <label>Model <input name="model" value="{{ item.model or '' }}"></label>
+  <label>Personalization <input name="personalization" value="{{ item.personalization or '' }}"></label>
+  <label>Location <input name="location" value="{{ item.location_lost_found or '' }}"></label>
+  <label>Status
+    <select name="status">
+      {% for s in ['Open', 'Returned'] %}
+        <option value="{{ s }}" {{ 'selected' if item.status == s }}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <button class="btn" type="submit">Save changes</button>
+  <a href="{{ url_for('admin_dashboard') }}">Cancel</a>
+</form>
+{% endblock %}

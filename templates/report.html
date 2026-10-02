@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Report {{ kind|capitalize }} Item{% endblock %}
+{% block content %}
+<h1>Report {{ kind|capitalize }} Item</h1>
+
+<form method="post" class="form">
+  <h3>Your details</h3>
+  <label>Your name <input name="name" required></label>
+  <label>Email <input type="email" name="email" required></label>
+  <label>Phone <input name="phone"></label>
+
+  <h3>Item details</h3>
+  <label>Item name <input name="item_name" required placeholder="e.g. Black wallet"></label>
+  <label>Item type <input name="item_type" required placeholder="e.g. Wallet"></label>
+  <label>Category
+    <select name="category_id" required>
+      {% for c in categories %}
+        <option value="{{ c.category_id }}">{{ c.category_name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Colour <input name="colour"></label>
+  <label>Brand <input name="brand"></label>
+  <label>Model <input name="model"></label>
+  <label>Personalization <input name="personalization" placeholder="Stickers, initials, keychain..."></label>
+  <label>Location {{ 'lost' if kind == 'lost' else 'found' }} <input name="location" required></label>
+  <label>Date {{ 'lost' if kind == 'lost' else 'found' }} <input type="date" name="date" value="{{ today }}" required></label>
+
+  <button class="btn" type="submit">Submit report</button>
+</form>
+{% endblock %}

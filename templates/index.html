@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <h1>Campus Lost &amp; Found Management System</h1>
+  <p>Lost something on campus? Found something? Start here.</p>
+</section>
+
+<section class="grid">
+  <a class="card" href="{{ url_for('search') }}">
+    <h2>🔍 Find Lost Item</h2>
+    <p>Search items that others have found.</p>
+  </a>
+  <a class="card" href="{{ url_for('report', kind='lost') }}">
+    <h2>📢 Report Lost Item</h2>
+    <p>Tell us what you lost.</p>
+  </a>
+  <a class="card" href="{{ url_for('report', kind='found') }}">
+    <h2>🎒 Report Found Item</h2>
+    <p>Help someone get their item back.</p>
+  </a>
+  <a class="card" href="{{ url_for('admin_login') }}">
+    <h2>🔐 Admin Login</h2>
+    <p>Manage items and claims.</p>
+  </a>
+</section>
+{% endblock %}

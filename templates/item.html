@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ item.item_name }}{% endblock %}
+{% block content %}
+<h1>{{ item.item_name }}</h1>
+<p><span class="badge">{{ item.report_type }}</span> <span class="badge">{{ item.status }}</span></p>
+
+<table class="details">
+  <tr><th>Type</th><td>{{ item.item_type }}</td></tr>
+  <tr><th>Category</th><td>{{ item.category_name }}</td></tr>
+  <tr><th>Colour</th><td>{{ item.colour }}</td></tr>
+  <tr><th>Brand</th><td>{{ item.brand }}</td></tr>
+  <tr><th>Model</th><td>{{ item.model }}</td></tr>
+  <tr><th>Personalization</th><td>{{ item.personalization }}</td></tr>
+  <tr><th>Location</th><td>{{ item.location_lost_found }}</td></tr>
+  <tr><th>Date</th><td>{{ item.date_lost_found }}</td></tr>
+</table>
+
+{% if item.report_type == 'FOUND' and item.status != 'Returned' %}
+  <button class="btn" onclick="toggleClaim()">Claim Item</button>
+
+  <form id="claimForm" method="post" action="{{ url_for('claim_item', item_id=item.item_id) }}" class="form hidden">
+    <h3>Claim this item</h3>
+    <label>Your name <input name="name" required></label>
+    <label>Email <input type="email" name="email" required></label>
+    <label>Phone <input name="phone"></label>
+    <label>Proof that it is yours
+      <textarea name="proof" rows="3" maxlength="200" required
+        placeholder="Describe something only the owner would know"></textarea>
+    </label>
+    <button class="btn" type="submit">Submit claim</button>
+  </form>
+{% endif %}
+
+<p><a href="{{ url_for('search') }}">← Back to search</a></p>
+{% endblock %}

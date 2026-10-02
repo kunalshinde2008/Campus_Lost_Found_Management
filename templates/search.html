@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Find Lost Item{% endblock %}
+{% block content %}
+<h1>Find Lost Item</h1>
+<p class="muted">Search the items that were reported as found. Leave a field empty to skip it.</p>
+
+<form method="get" action="{{ url_for('search') }}" class="form">
+  <input type="hidden" name="searched" value="1">
+  <label>Item type <input name="item_type" value="{{ f.item_type }}" placeholder="e.g. Phone, Wallet, Bag"></label>
+  <label>Colour <input name="colour" value="{{ f.colour }}"></label>
+  <label>Brand <input name="brand" value="{{ f.brand }}"></label>
+  <label>Model <input name="model" value="{{ f.model }}"></label>
+  <label>Personalization <input name="personalization" value="{{ f.personalization }}" placeholder="e.g. sticker, name, keychain"></label>
+  <button class="btn" type="submit">Search</button>
+</form>
+
+{% if results is not none %}
+  <h2>Matching found items ({{ results|length }})</h2>
+  {% if results %}
+    <div class="grid">
+      {% for r in results %}
+      <div class="card">
+        <h3>{{ r.item_name }}</h3>
+        <p><span class="badge">Match score: {{ r.match_score }}/3</span></p>
+        <p>{{ r.item_type }} · {{ r.colour }} · {{ r.brand }} {{ r.model }}</p>
+        <p class="muted">Found at {{ r.location_lost_found }} on {{ r.date_lost_found }}</p>
+        <a class="btn small" href="{{ url_for('item_detail', item_id=r.item_id) }}">View details</a>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No matching found items yet. Try fewer filters or report your lost item.</p>
+  {% endif %}
+{% endif %}
+{% endblock %}

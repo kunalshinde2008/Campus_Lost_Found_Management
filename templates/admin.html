@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<h1>Admin Dashboard</h1>
+
+<section class="grid stats">
+  <div class="card stat"><h2>{{ lost }}</h2><p>Total lost items</p></div>
+  <div class="card stat"><h2>{{ found }}</h2><p>Total found items</p></div>
+  <div class="card stat"><h2>{{ pending }}</h2><p>Pending claims</p></div>
+</section>
+
+<h2>Claims</h2>
+<div class="table-wrap">
+<table class="data">
+  <tr><th>ID</th><th>Item</th><th>Claimer</th><th>Proof</th><th>Date</th><th>Status</th><th>Action</th></tr>
+  {% for c in claims %}
+  <tr>
+    <td>{{ c.claim_id }}</td>
+    <td>{{ c.item_name }}</td>
+    <td>{{ c.claimer_name }}<br><small>{{ c.claimer_email }}</small></td>
+    <td>{{ c.proof_description }}</td>
+    <td>{{ c.claim_date }}</td>
+    <td><span class="badge">{{ c.claim_status }}</span></td>
+    <td>
+      {% if c.claim_status == 'Pending' %}
+        <form method="post" action="{{ url_for('update_claim', claim_id=c.claim_id, action='approve') }}" class="inline">
+          <button class="btn small">Approve</button>
+        </form>
+        <form method="post" action="{{ url_for('update_claim', claim_id=c.claim_id, action='reject') }}" class="inline">
+          <button class="btn small danger">Reject</button>
+        </form>
+      {% endif %}
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="7">No claims yet.</td></tr>
+  {% endfor %}
+</table>
+</div>
+
+<h2>All items</h2>
+<div class="table-wrap">
+<table class="data">
+  <tr><th>ID</th><th>Type</th><th>Name</th><th>Colour</th><th>Brand / Model</th><th>Location</th><th>Date</th><th>Status</th><th>Reporter</th><th>Action</th></tr>
+  {% for i in items %}
+  <tr>
+    <td>{{ i.item_id }}</td>
+    <td>{{ i.report_type }}</td>
+    <td><a href="{{ url_for('item_detail', item_id=i.item_id) }}">{{ i.item_name }}</a></td>
+    <td>{{ i.colour }}</td>
+    <td>{{ i.brand }} {{ i.model }}</td>
+    <td>{{ i.location_lost_found }}</td>
+    <td>{{ i.date_lost_found }}</td>
+    <td><span class="badge">{{ i.status }}</span></td>
+    <td>{{ i.reporter_name }}</td>
+    <td>
+      <a class="btn small" href="{{ url_for('edit_item', item_id=i.item_id) }}">Edit</a>
+      <form method="post" action="{{ url_for('delete_item', item_id=i.item_id) }}" class="inline"
+            onsubmit="return confirm('Delete this item and its claims?');">
+        <button class="btn small danger">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="10">No items yet.</td></tr>
+  {% endfor %}
+</table>
+</div>
+{% endblock %}
